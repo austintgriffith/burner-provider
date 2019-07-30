@@ -7,6 +7,8 @@ const VmSubprovider = require('web3-provider-engine/subproviders/vm.js')
 const HookedWalletSubprovider = require('web3-provider-engine/subproviders/hooked-wallet.js')
 const NonceSubprovider = require('web3-provider-engine/subproviders/nonce-tracker.js')
 const RpcSubprovider = require('web3-provider-engine/subproviders/rpc.js')
+const ethUtil = require('ethereumjs-util')
+const sigUtil = require('eth-sig-util')
 
 module.exports = BurnerProvider
 
@@ -79,7 +81,14 @@ function BurnerProvider(opts = {}){
     sign: metaAccount.sign,
     encrypt: metaAccount.encrypt,
     privateKey: metaAccount.privateKey,
-    address: metaAccount.address
+    address: metaAccount.address,
+    signMessage: (msgParams,cb) => {
+      var message = ethUtil.toBuffer(msgParams.data)
+      var msgHash = ethUtil.hashPersonalMessage(message)
+      var sig = ethUtil.ecsign(msgHash,Buffer.from(metaAccount.privateKey.replace("0x",""), 'hex'))
+      var serialized = ethUtil.bufferToHex(sigUtil.concatSig(sig.v, sig.r, sig.s))
+      cb(null, serialized)
+    }
   }))
 
   // data source
