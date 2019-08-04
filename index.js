@@ -4,11 +4,9 @@ const CacheSubprovider = require('web3-provider-engine/subproviders/cache.js')
 const FixtureSubprovider = require('web3-provider-engine/subproviders/fixture.js')
 const FilterSubprovider = require('web3-provider-engine/subproviders/filters.js')
 const VmSubprovider = require('web3-provider-engine/subproviders/vm.js')
-const HookedWalletSubprovider = require('web3-provider-engine/subproviders/hooked-wallet.js')
+const HookedWalletSubprovider = require('web3-provider-engine/subproviders/hooked-wallet-ethtx.js')
 const NonceSubprovider = require('web3-provider-engine/subproviders/nonce-tracker.js')
 const RpcSubprovider = require('web3-provider-engine/subproviders/rpc.js')
-const ethUtil = require('ethereumjs-util')
-const sigUtil = require('eth-sig-util')
 
 module.exports = BurnerProvider
 
@@ -19,9 +17,9 @@ function BurnerProvider(opts = {}){
   var web3 = new Web3(engine)
 
   // let them pass in a simple string for the options and use that as infura or whatevs
-  let rpcUrl = opts
-  if(typeof rpcUrl != "string"){
-    rpcUrl = opts.rpcUrl
+  if(typeof opts == "string"){
+    let rpcUrl = opts
+    opts = {rpcUrl}
   }
 
   if(opts&&opts.privateKey){
@@ -46,6 +44,19 @@ function BurnerProvider(opts = {}){
     }
   }
 
+  opts.getPrivateKey = (address,cb)=>{
+    if(address.toLowerCase()==metaAccount.address.toLowerCase()){
+      cb(null,Buffer.from(metaAccount.privateKey.replace("0x",""),'hex'))
+    }else{
+      cb("unknown account")
+    }
+  }
+  
+  opts.getAccounts = (cb)=>{
+    console.log("getAccounts!!")
+    cb(false,[metaAccount.address])
+  }
+
   // static results
   engine.addProvider(new FixtureSubprovider({
     web3_clientVersion: 'ProviderEngine/v0.0.0/javascript',
@@ -68,41 +79,13 @@ function BurnerProvider(opts = {}){
   engine.addProvider(new VmSubprovider())
 
   // id mgmt
-  engine.addProvider(new HookedWalletSubprovider({
-    getAccounts: function(cb){
-      console.log("getAccounts!!")
-      cb(false,[metaAccount.address])
-    },
-    approveTransaction: function(cb){
-      console.log("no interface yet for approveTransaction!!")
-      cb(true)
-    },
-    signTransaction: metaAccount.signTransaction,
-    sign: metaAccount.sign,
-    encrypt: metaAccount.encrypt,
-    privateKey: metaAccount.privateKey,
-    address: metaAccount.address,
-    signMessage: (msgParams,cb) => {
-      var message = ethUtil.toBuffer(msgParams.data)
-      var msgHash = ethUtil.hashPersonalMessage(message)
-      var sig = ethUtil.ecsign(msgHash,Buffer.from(metaAccount.privateKey.replace("0x",""), 'hex'))
-      var serialized = ethUtil.bufferToHex(sigUtil.concatSig(sig.v, sig.r, sig.s))
-      cb(null, serialized)
-    }
-  }))
+  engine.addProvider(new HookedWalletSubprovider(opts))
 
   // data source
-  engine.addProvider(new RpcSubprovider({
-    rpcUrl: rpcUrl,
-  }))
+  engine.addProvider(new RpcSubprovider(opts))
 
   // start polling for blocks
   engine.start()
 
   return engine
-}
-
-
-function generateMetaAccount(){
-  let result = window.web3.eth.accounts.create();
 }

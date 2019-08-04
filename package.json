@@ -1,0 +1,24 @@
+{
+  "name": "burner-provider",
+  "version": "1.0.0",
+  "description": "Ephemeral key pair web3 provider",
+  "main": "index.js",
+  "dependencies": {
+    "web3": "^1.2.0",
+    "web3-provider-engine": "^15.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/austintgriffith/burner-provider.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/austintgriffith/burner-provider/issues"
+  },
+  "homepage": "https://github.com/austintgriffith/burner-provider#readme"
+}
