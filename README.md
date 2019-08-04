@@ -2,6 +2,8 @@
 
 Ephemeral key pair web3 provider
 
+Here is an [example React app](https://github.com/austintgriffith/burner-provider-example) that uses the burner-provider!
+
 Pass `BurnerProvider` into Web() to initialize:
 ```javascript
 import BurnerProvider from 'burner-provider';
