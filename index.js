@@ -1,4 +1,5 @@
 var Web3 = require('web3');
+var fs = require('fs');
 const ProviderEngine = require('web3-provider-engine')
 const CacheSubprovider = require('web3-provider-engine/subproviders/cache.js')
 const FixtureSubprovider = require('web3-provider-engine/subproviders/fixture.js')
@@ -32,7 +33,14 @@ function BurnerProvider(opts = {}){
     if(metaPrivateKey && metaPrivateKey.length!==66) metaPrivateKey=false;
     if(metaPrivateKey) metaAccount = web3.eth.accounts.privateKeyToAccount(metaPrivateKey)
   }else{
-    //local storage isn't an option and they didn't pass in a pk so just generate one in memory
+    //local storage isn't an option and they didn't pass in a pk attempted to use the filesystem
+    try{
+      let fsPk = fs.readFileSync(".pk").toString()
+      if(fsPk){
+        metaAccount = web3.eth.accounts.privateKeyToAccount(fsPk)
+      }
+    }catch(e){}
+    // if not just generate a temp account in memory for this session
     // (just leave metaAccount false and it will be created in the next block)
   }
 
@@ -41,6 +49,11 @@ function BurnerProvider(opts = {}){
     //if we needed to generate, save the pk to local storage
     if(typeof localStorage != "undefined"&&typeof localStorage.setItem == "function"){
       localStorage.setItem('metaPrivateKey',metaAccount.privateKey)
+    }else{
+      //if we can't use local storage try saving it to the filesystem
+      try{
+        fs.writeFileSync(".pk",metaAccount.privateKey)
+      }catch(e){}
     }
   }
 
@@ -51,9 +64,8 @@ function BurnerProvider(opts = {}){
       cb("unknown account")
     }
   }
-  
+
   opts.getAccounts = (cb)=>{
-    console.log("getAccounts!!")
     cb(false,[metaAccount.address])
   }
 
