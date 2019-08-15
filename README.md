@@ -48,6 +48,11 @@ var web3 = new Web3(new BurnerProvider({
 }));
 ```
 
+Websockets work too:
+```
+var web3 = new Web3(new BurnerProvider('wss://mainnet.infura.io/ws'));
+```
+
 -----------------------------------
 
 Full CLI Example:
