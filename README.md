@@ -41,7 +41,7 @@ localStorage.getItem('metaPrivateKey')
 ```
 
 Optional Parameters:
-```
+```javascript
 var web3 = new Web3(new BurnerProvider({
   rpcUrl: 'http://localhost:8545',
   namespace: 'YourCoolUrl'
@@ -49,7 +49,7 @@ var web3 = new Web3(new BurnerProvider({
 ```
 
 Websockets work too:
-```
+```javascript
 var web3 = new Web3(new BurnerProvider('wss://mainnet.infura.io/ws'));
 ```
 
