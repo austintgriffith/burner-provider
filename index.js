@@ -23,12 +23,17 @@ function BurnerProvider(opts = {}){
     opts = {rpcUrl}
   }
 
+  let privateKeyStorageString = "metaPrivateKey"
+  if(opts.namespace){
+    privateKeyStorageString = privateKeyStorageString+"_"+opts.namespace
+  }
+
   if(opts&&opts.privateKey){
     //if they passed in a private key, use it to generate an account
     metaAccount = web3.eth.accounts.privateKeyToAccount(opts.privateKey)
   } else if(typeof localStorage != "undefined"&&typeof localStorage.setItem == "function"){
     //load private key out of local storage
-    let metaPrivateKey = localStorage.getItem('metaPrivateKey')
+    let metaPrivateKey = localStorage.getItem(privateKeyStorageString)
     if(metaPrivateKey=="0") metaPrivateKey=false;
     if(metaPrivateKey && metaPrivateKey.length!==66) metaPrivateKey=false;
     if(metaPrivateKey) metaAccount = web3.eth.accounts.privateKeyToAccount(metaPrivateKey)
@@ -48,7 +53,7 @@ function BurnerProvider(opts = {}){
     metaAccount = web3.eth.accounts.create();
     //if we needed to generate, save the pk to local storage
     if(typeof localStorage != "undefined"&&typeof localStorage.setItem == "function"){
-      localStorage.setItem('metaPrivateKey',metaAccount.privateKey)
+      localStorage.setItem(privateKeyStorageString,metaAccount.privateKey)
     }else{
       //if we can't use local storage try saving it to the filesystem
       try{
