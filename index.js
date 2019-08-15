@@ -8,6 +8,7 @@ const VmSubprovider = require('web3-provider-engine/subproviders/vm.js')
 const HookedWalletSubprovider = require('web3-provider-engine/subproviders/hooked-wallet-ethtx.js')
 const NonceSubprovider = require('web3-provider-engine/subproviders/nonce-tracker.js')
 const RpcSubprovider = require('web3-provider-engine/subproviders/rpc.js')
+const WebSocketSubProvider = require('web3-provider-engine/subproviders/websocket.js')
 
 module.exports = BurnerProvider
 
@@ -71,6 +72,7 @@ function BurnerProvider(opts = {}){
   }
 
   opts.getAccounts = (cb)=>{
+    console.log("metaAccount",metaAccount)
     cb(false,[metaAccount.address])
   }
 
@@ -82,6 +84,7 @@ function BurnerProvider(opts = {}){
     eth_mining: false,
     eth_syncing: true,
   }))
+
 
   // cache layer
   engine.addProvider(new CacheSubprovider())
@@ -98,8 +101,14 @@ function BurnerProvider(opts = {}){
   // id mgmt
   engine.addProvider(new HookedWalletSubprovider(opts))
 
-  // data source
-  engine.addProvider(new RpcSubprovider(opts))
+
+
+  if(opts.rpcUrl.indexOf("wss://")==0){
+    engine.addProvider(new WebSocketSubProvider(opts))
+  }else{
+    // data source
+    engine.addProvider(new RpcSubprovider(opts))
+  }
 
   // start polling for blocks
   engine.start()
