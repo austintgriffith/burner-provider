@@ -57,7 +57,7 @@ var web3 = new Web3(new BurnerProvider('wss://mainnet.infura.io/ws'));
 
 Full CLI Example:
 `index.js`:
-```
+```javascript
 var Web3 = require('web3');
 var BurnerProvider = require('./index.js')
 
