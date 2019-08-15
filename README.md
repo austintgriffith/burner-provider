@@ -4,6 +4,10 @@ Ephemeral key pair web3 provider
 
 Here is an [example React app](https://github.com/austintgriffith/burner-provider-example) that uses the burner-provider!
 
+```
+npm install burner-provider
+```
+
 Pass `BurnerProvider` into Web() to initialize:
 ```javascript
 import BurnerProvider from 'burner-provider';
@@ -34,6 +38,14 @@ web3.eth.sendTransaction(tx).then((receipt)=>{
 You also can access the private key directly with:
 ```javascript
 localStorage.getItem('metaPrivateKey')
+```
+
+Optional Parameters:
+```
+var web3 = new Web3(new BurnerProvider({
+  rpcUrl: 'http://localhost:8545',
+  namespace: 'YourCoolUrl'
+}));
 ```
 
 -----------------------------------
