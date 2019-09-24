@@ -6,12 +6,19 @@ var BurnerProvider = require('./index.js')
 //
 //or you can even pass in a pk:
 //var web3 = new Web3(new BurnerProvider({
-//    rpcUrl: 'wss://mainnet.infura.io/ws',
+//    rpcUrl: 'http://localhost:8545',
 //    privateKey: '0xc0745ca88cdcb802a30ba467850e19019f8e7354eecc5ab674d78452e4feab84'
 //}));
+//or you can pass a mnemonic and wallet index:
+//var web3 = new Web3(new BurnerProvider({
+//    rpcUrl: 'http://localhost:8545',
+//    mnemonic: 'the bear is sticky with honey'
+//}));
 //or you can pass it a websocket:
-var web3 = new Web3(new BurnerProvider('wss://mainnet.infura.io/ws'));
-
+//var web3 = new Web3(new BurnerProvider('wss://mainnet.infura.io/ws'));
+var web3 = new Web3(new BurnerProvider({
+   rpcUrl: 'wss://mainnet.infura.io/ws',
+}));
 
 console.log(web3.version)
 web3.eth.getBlockNumber().then(console.log);

@@ -51,7 +51,23 @@ function BurnerProvider(opts = {}){
   }
 
   if(!metaAccount){
-    metaAccount = web3.eth.accounts.create();
+    //generate account either from a provided mnemonic, pk, or random generation
+    if(opts.mnemonic){
+      const bip39 = require('bip39');
+      const hdkey = require('ethereumjs-wallet/hdkey');
+      let index = "0"
+      if(typeof opts.index != "undefined"){
+        index = opts.index
+      }
+      const seed = bip39.mnemonicToSeedSync(opts.mnemonic);
+      const hdwallet = hdkey.fromMasterSeed(seed);
+      const wallet_hdpath = "m/44'/60'/0'/0/";
+      const wallet = hdwallet.derivePath(wallet_hdpath + index).getWallet();
+      const privateKey ="0x"+wallet.getPrivateKey().toString("hex")
+      metaAccount = web3.eth.accounts.privateKeyToAccount(privateKey)
+    }else{
+      metaAccount = web3.eth.accounts.create();
+    }
     //if we needed to generate, save the pk to local storage
     if(typeof localStorage != "undefined"&&typeof localStorage.setItem == "function"){
       localStorage.setItem(privateKeyStorageString,metaAccount.privateKey)
@@ -72,7 +88,7 @@ function BurnerProvider(opts = {}){
   }
 
   opts.getAccounts = (cb)=>{
-    console.log("metaAccount",metaAccount)
+    //console.log("metaAccount",metaAccount)
     cb(false,[metaAccount.address])
   }
 
