@@ -16,7 +16,7 @@ var web3 = new Web3(new BurnerProvider('http://localhost:8545'));
 ```
 
 You can get your address with:
-```javascript 
+```javascript
 let accounts = await web3.eth.getAccounts()
 ```
 
@@ -51,6 +51,14 @@ var web3 = new Web3(new BurnerProvider({
 Websockets work too:
 ```javascript
 var web3 = new Web3(new BurnerProvider('wss://mainnet.infura.io/ws'));
+```
+
+You can generate your wallet from a mnemonic and optional index too:
+```javascript
+var web3 = new Web3(new BurnerProvider({
+    rpcUrl: 'http://localhost:8545',
+    mnemonic: 'the bear is sticky with honey'
+}));
 ```
 
 -----------------------------------
@@ -93,4 +101,3 @@ node index.js
 ```
 
 ![image](https://user-images.githubusercontent.com/2653167/62563225-cb9c9d80-b83f-11e9-8496-b590226ef192.png)
-
