@@ -15,6 +15,13 @@ import Web3 from 'web3';
 var web3 = new Web3(new BurnerProvider('http://localhost:8545'));
 ```
 
+OR using old `require()` method:
+```javascript
+const BurnerProvider = require('burner-provider');
+const Web3 = require('web3');
+var web3 = new Web3(new BurnerProvider('http://localhost:8545'));
+```
+
 You can get your address with:
 ```javascript
 let accounts = await web3.eth.getAccounts()
