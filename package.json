@@ -1,6 +1,6 @@
 {
   "name": "burner-provider",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "Ephemeral key pair web3 provider",
   "main": "index.js",
   "dependencies": {
