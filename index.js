@@ -1,4 +1,4 @@
-var Web3 = require('web3');
+var ethers = require('ethers');
 var fs = require('fs');
 const ProviderEngine = require('web3-provider-engine')
 const CacheSubprovider = require('web3-provider-engine/subproviders/cache.js')
@@ -16,7 +16,7 @@ let metaAccount
 
 function BurnerProvider(opts = {}){
   var engine = new ProviderEngine()
-  var web3 = new Web3(engine)
+  let provider = new ethers.providers.Web3Provider(engine)
 
   // let them pass in a simple string for the options and use that as infura or whatevs
   if(typeof opts == "string"){
@@ -31,19 +31,22 @@ function BurnerProvider(opts = {}){
 
   if(opts&&opts.privateKey){
     //if they passed in a private key, use it to generate an account
-    metaAccount = web3.eth.accounts.privateKeyToAccount(opts.privateKey)
+    //metaAccount = provider.eth.accounts.privateKeyToAccount(opts.privateKey)
+    metaAccount = new ethers.Wallet(opts.privateKey, provider);
+    //console.log("metaAccount from pk",metaAccount)
   } else if(typeof localStorage != "undefined"&&typeof localStorage.setItem == "function"){
     //load private key out of local storage
     let metaPrivateKey = localStorage.getItem(privateKeyStorageString)
     if(metaPrivateKey=="0") metaPrivateKey=false;
     if(metaPrivateKey && metaPrivateKey.length!==66) metaPrivateKey=false;
-    if(metaPrivateKey) metaAccount = web3.eth.accounts.privateKeyToAccount(metaPrivateKey)
+    //if(metaPrivateKey) metaAccount = provider.eth.accounts.privateKeyToAccount(metaPrivateKey)
+    if(metaPrivateKey) metaAccount = new ethers.Wallet(metaPrivateKey, provider);
   }else{
     //local storage isn't an option and they didn't pass in a pk attempted to use the filesystem
     try{
       let fsPk = fs.readFileSync(".pk").toString()
       if(fsPk){
-        metaAccount = web3.eth.accounts.privateKeyToAccount(fsPk)
+        metaAccount = new ethers.Wallet(fsPk, provider);
       }
     }catch(e){}
     // if not just generate a temp account in memory for this session
@@ -64,9 +67,11 @@ function BurnerProvider(opts = {}){
       const wallet_hdpath = "m/44'/60'/0'/0/";
       const wallet = hdwallet.derivePath(wallet_hdpath + index).getWallet();
       const privateKey ="0x"+wallet.getPrivateKey().toString("hex")
-      metaAccount = web3.eth.accounts.privateKeyToAccount(privateKey)
+      //metaAccount = provider.eth.accounts.privateKeyToAccount(privateKey)
+      metaAccount = new ethers.Wallet(privateKey, provider);
     }else{
-      metaAccount = web3.eth.accounts.create();
+      //metaAccount = provider.eth.accounts.create();
+      metaAccount = ethers.Wallet.createRandom()
     }
     //if we needed to generate, save the pk to local storage
     if(typeof localStorage != "undefined"&&typeof localStorage.setItem == "function"){
