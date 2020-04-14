@@ -22,6 +22,13 @@ const Web3 = require('web3');
 var web3 = new Web3(new BurnerProvider('http://localhost:8545'));
 ```
 
+OR using `ethers.js`:
+```javascript
+const BurnerProvider = require('burner-provider');
+const ethers = require('ethers');
+let provider = new ethers.providers.Web3Provider(new BurnerProvider('http://localhost:8545'));
+```
+
 You can get your address with:
 ```javascript
 let accounts = await web3.eth.getAccounts()
