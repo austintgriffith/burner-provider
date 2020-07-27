@@ -127,6 +127,11 @@ function BurnerProvider(opts = {}){
   hookedWalletSubprovider.signTypedMessage = function (msgParams, cb) {
     opts.getPrivateKey(msgParams.from, function(err, privateKey) {
       if (err) return cb(err)
+      
+      if (typeof msgParams.data === 'string') {
+        msgParams.data = JSON.parse(msgParams.data);
+      }
+      
       const serialized = sigUtil.signTypedData_v4(privateKey, msgParams)
       cb(null, serialized)
     })
