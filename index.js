@@ -17,7 +17,15 @@ module.exports = BurnerProvider
 let metaAccount
 
 function BurnerProvider(opts = {}){
-  var engine = new ProviderEngine()
+
+  var engine
+
+  if(opts && opts.provider){
+    engine = opts.provider
+  }else{
+    engine = new ProviderEngine()
+  }
+
   let provider = new ethers.providers.Web3Provider(engine)
 
   // let them pass in a simple string for the options and use that as infura or whatevs
@@ -127,11 +135,11 @@ function BurnerProvider(opts = {}){
   hookedWalletSubprovider.signTypedMessage = function (msgParams, cb) {
     opts.getPrivateKey(msgParams.from, function(err, privateKey) {
       if (err) return cb(err)
-      
+
       if (typeof msgParams.data === 'string') {
         msgParams.data = JSON.parse(msgParams.data);
       }
-      
+
       const serialized = sigUtil.signTypedData_v4(privateKey, msgParams)
       cb(null, serialized)
     })
