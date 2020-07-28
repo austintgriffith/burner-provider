@@ -18,12 +18,12 @@ let metaAccount
 
 function BurnerProvider(opts = {}){
 
-  var engine
+  var engine  = new ProviderEngine()
+
 
   if(opts && opts.provider){
-    engine = opts.provider
-  }else{
-    engine = new ProviderEngine()
+    console.log("Adding optional provider: ",opts.provider)
+    engine.addProvider(opts.provider)
   }
 
   let provider = new ethers.providers.Web3Provider(engine)
