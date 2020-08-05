@@ -108,6 +108,7 @@ function BurnerProvider(opts = {}){
     eth_syncing: true,
   }))
 
+
   // cache layer
   engine.addProvider(new CacheSubprovider())
 
@@ -137,8 +138,6 @@ function BurnerProvider(opts = {}){
   }
   engine.addProvider(hookedWalletSubprovider)
 
-  //do this to prevent skipCache: true -- to prevent PollingBlockTracker undefined errors from eth-block-tracker/src/polling.js
-  engine._blockTracker._setSkipCacheFlag = false
 
 
   if(opts&&opts.rpcUrl&&opts.rpcUrl.indexOf&&opts.rpcUrl.indexOf("wss://")==0){
@@ -148,8 +147,12 @@ function BurnerProvider(opts = {}){
     engine.addProvider(new RpcSubprovider(opts))
   }
 
+  //do this to prevent skipCache: true -- to prevent PollingBlockTracker undefined errors from eth-block-tracker/src/polling.js
+  engine._blockTracker._setSkipCacheFlag = false
+
   // start polling for blocks
   engine.start()
+
 
 
   return engine
