@@ -25,6 +25,7 @@ function BurnerProvider(opts = {}){
     let rpcUrl = opts
     opts = {rpcUrl}
   }
+  opts.setSkipCacheFlag = false
 
   let privateKeyStorageString = "metaPrivateKey"
   if(opts.namespace){
@@ -106,17 +107,18 @@ function BurnerProvider(opts = {}){
     eth_hashrate: '0x00',
     eth_mining: false,
     eth_syncing: true,
+    setSkipCacheFlag: false
   }))
 
 
   // cache layer
-  engine.addProvider(new CacheSubprovider())
+  engine.addProvider(new CacheSubprovider({setSkipCacheFlag: false}))
 
   // filters
-  engine.addProvider(new FilterSubprovider())
+  engine.addProvider(new FilterSubprovider({setSkipCacheFlag: false}))
 
   // pending nonce
-  engine.addProvider(new NonceSubprovider())
+  engine.addProvider(new NonceSubprovider({setSkipCacheFlag: false}))
 
   // vm
   // engine.addProvider(new VmSubprovider())
