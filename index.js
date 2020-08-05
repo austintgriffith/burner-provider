@@ -108,6 +108,8 @@ function BurnerProvider(opts = {}){
     eth_syncing: true,
   }))
 
+  //do this to prevent skipCache: true -- to prevent PollingBlockTracker undefined errors from eth-block-tracker/src/polling.js
+  engine._blockTracker._setSkipCacheFlag = false
 
   // cache layer
   engine.addProvider(new CacheSubprovider())
@@ -150,10 +152,6 @@ function BurnerProvider(opts = {}){
   // start polling for blocks
   engine.start()
 
-  //do this to prevent skipCache: true -- to prevent PollingBlockTracker undefined errors from eth-block-tracker/src/polling.js
-  engine._blockTracker._setSkipCacheFlag = false
-
-  console.log("engine",engine)
 
   return engine
 }
