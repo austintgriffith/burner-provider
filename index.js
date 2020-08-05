@@ -26,6 +26,8 @@ function BurnerProvider(opts = {}){
     opts = {rpcUrl}
   }
 
+  opts._setSkipCacheFlag = false
+
   let privateKeyStorageString = "metaPrivateKey"
   if(opts.namespace){
     privateKeyStorageString = privateKeyStorageString+"_"+opts.namespace
