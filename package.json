@@ -1,6 +1,6 @@
 {
   "name": "burner-provider",
-  "version": "1.0.30",
+  "version": "1.0.27",
   "description": "Ephemeral key pair web3 provider",
   "main": "index.js",
   "dependencies": {
@@ -8,7 +8,7 @@
     "eth-sig-util": "^2.5.3",
     "ethereumjs-wallet": "^0.6.3",
     "ethers": "^4.0.46",
-    "web3-provider-engine": "^15.0.6"
+    "web3-provider-engine": "^15.0.7"
   },
   "devDependencies": {},
   "scripts": {

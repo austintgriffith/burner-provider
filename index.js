@@ -17,7 +17,7 @@ module.exports = BurnerProvider
 let metaAccount
 
 function BurnerProvider(opts = {}){
-  var engine = new ProviderEngine({setSkipCacheFlag: false})
+  var engine = new ProviderEngine()
   let provider = new ethers.providers.Web3Provider(engine)
 
   // let them pass in a simple string for the options and use that as infura or whatevs
@@ -25,7 +25,6 @@ function BurnerProvider(opts = {}){
     let rpcUrl = opts
     opts = {rpcUrl}
   }
-  opts.setSkipCacheFlag = false
 
   let privateKeyStorageString = "metaPrivateKey"
   if(opts.namespace){
@@ -107,18 +106,17 @@ function BurnerProvider(opts = {}){
     eth_hashrate: '0x00',
     eth_mining: false,
     eth_syncing: true,
-    setSkipCacheFlag: false
   }))
 
 
   // cache layer
-  engine.addProvider(new CacheSubprovider({setSkipCacheFlag: false}))
+  engine.addProvider(new CacheSubprovider())
 
   // filters
-  engine.addProvider(new FilterSubprovider({setSkipCacheFlag: false}))
+  engine.addProvider(new FilterSubprovider())
 
   // pending nonce
-  engine.addProvider(new NonceSubprovider({setSkipCacheFlag: false}))
+  engine.addProvider(new NonceSubprovider())
 
   // vm
   // engine.addProvider(new VmSubprovider())
