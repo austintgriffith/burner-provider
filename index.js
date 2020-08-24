@@ -140,7 +140,7 @@ function BurnerProvider(opts = {}){
 
 
 
-  if(opts&&opts.rpcUrl&&opts.rpcUrl.indexOf&&opts.rpcUrl.indexOf("wss://")==0){
+  if(/*opts&&opts.rpcUrl&&opts.rpcUrl.indexOf&&*/opts.rpcUrl.indexOf("wss://")==0){
     engine.addProvider(new WebSocketSubProvider(opts))
   }else{
     // data source
