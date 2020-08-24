@@ -160,15 +160,12 @@ function BurnerProvider(opts = {}){
     engine.addProvider(new RpcSubprovider(opts))
   }
 
+  // start polling for blocks
+  engine.start()
 
 
   //do this to prevent skipCache: true -- to prevent PollingBlockTracker undefined errors from eth-block-tracker/src/polling.js
-  engine._blockTracker._setSkipCacheFlag = false
-
-  console.log("SORRY THIS BREAKS IT I THINK WILL PUSH FIX JUST A SEC")
-
-  // start polling for blocks
-  engine.start()
+  //engine._blockTracker._setSkipCacheFlag = false
 
   return engine
 }
