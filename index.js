@@ -17,14 +17,26 @@ module.exports = BurnerProvider
 let metaAccount
 
 function BurnerProvider(opts = {}){
-  var engine = new ProviderEngine()
-  let provider = new ethers.providers.Web3Provider(engine)
+  var engine;// = new ProviderEngine()
+
 
   // let them pass in a simple string for the options and use that as infura or whatevs
   if(typeof opts == "string"){
     let rpcUrl = opts
     opts = {rpcUrl}
   }
+
+  if(opts && opts.provider){
+    //console.log("Adding optional provider: ",opts.provider)
+    //engine.addProvider(opts.provider)
+    engine = opts.provider
+    //console.log("Adding optional provider: ",opts.provider)
+  }else{/*engine.addProvider(opts.provider)*/
+    engine = new ProviderEngine()
+  }
+
+  let provider = new ethers.providers.Web3Provider(engine)
+
 
   let privateKeyStorageString = "metaPrivateKey"
   if(opts.namespace){
@@ -140,7 +152,7 @@ function BurnerProvider(opts = {}){
 
 
 
-  if(/*opts&&opts.rpcUrl&&opts.rpcUrl.indexOf&&*/opts.rpcUrl.indexOf("wss://")==0){
+  if(opts&&opts.rpcUrl&&opts.rpcUrl.indexOf&&opts.rpcUrl.indexOf("wss://")==0){
     engine.addProvider(new WebSocketSubProvider(opts))
   }else{
     // data source
