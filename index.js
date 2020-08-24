@@ -19,6 +19,7 @@ let metaAccount
 function BurnerProvider(opts = {}){
   var engine;// = new ProviderEngine()
 
+  console.log("🚛🚛🚛🚛🚛🚛🚛 BurnerProvider 🚛🚛🚛🚛🚛🚛🚛")
 
   // let them pass in a simple string for the options and use that as infura or whatevs
   if(typeof opts == "string"){
