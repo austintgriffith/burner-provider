@@ -1,7 +1,7 @@
 var ethers = require('ethers');
 var fs = require('fs');
 const ProviderEngine = require('web3-provider-engine')
-const CacheSubprovider = require('web3-provider-engine/subproviders/cache.js')
+//const CacheSubprovider = require('web3-provider-engine/subproviders/cache.js')
 const FixtureSubprovider = require('web3-provider-engine/subproviders/fixture.js')
 const FilterSubprovider = require('web3-provider-engine/subproviders/filters.js')
 const HookedWalletSubprovider = require('web3-provider-engine/subproviders/hooked-wallet-ethtx.js')
@@ -122,8 +122,8 @@ function BurnerProvider(opts = {}){
   }))
 
 
-  // cache layer
-  engine.addProvider(new CacheSubprovider())
+  // cache layer // PULLED THANKS TO A HEADS UP FROM GSN! SORRY GUYS!
+  //engine.addProvider(new CacheSubprovider())
 
   // filters
   engine.addProvider(new FilterSubprovider())
